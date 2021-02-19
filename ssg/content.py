@@ -1,6 +1,7 @@
 import re
-from yaml import load, FullLoader
+
 from collections.abc import Mapping
+from yaml import load, FullLoader
 
 
 class Content(Mapping):
@@ -10,7 +11,7 @@ class Content(Mapping):
   @classmethod
   def load(cls, string):
     _, fm, content = cls.__regex.split(string, 2)
-    metadata = cls.load(fm, Loader=FullLoader)
+    metadata = load(fm, Loader=FullLoader)
     return cls(metadata, content)
 
   def __init__(self, metadata, content):
@@ -23,7 +24,7 @@ class Content(Mapping):
 
   @property
   def type(self):
-    return self.data["type"] if self.data["type"].exist_ok else None
+    return self.data["type"] if "type" in self.data else None
 
   @type.setter
   def type(self, type):
@@ -33,7 +34,7 @@ class Content(Mapping):
     return self.data[key]
 
   def __iter__(self):
-    self.data.__iter__
+    self.data.__iter__()
 
   def __len__(self):
     return len(self.data)
